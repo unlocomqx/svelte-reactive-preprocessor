@@ -1,5 +1,5 @@
 {
-  "name": "svelte-reactive-debugger",
+  "name": "svelte-rxd-preprocessor",
   "version": "0.0.1",
   "description": "Wrap svelte reactive statements with custom events to allow devtools to detect them",
   "main": "index.js",
