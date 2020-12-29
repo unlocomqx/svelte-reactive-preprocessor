@@ -1,4 +1,7 @@
-export const preprocess = (options) => {
+const acorn = require("acorn");
+const {extract_names} = require("periscopic");
+
+function rxd_preprocess(options) {
   let code = options.content;
 
   const replacements = [];
@@ -97,7 +100,7 @@ export const preprocess = (options) => {
   }
 
   function dsp(type, detail, start_time) {
-    const ev = document.createEvent('CustomEvent');
+    const ev = document.createEvent("CustomEvent");
     detail.start_time = start_time;
     ev.initCustomEvent(type, false, false, detail);
     document.dispatchEvent(ev);
@@ -106,3 +109,5 @@ export const preprocess = (options) => {
   code = code + dsp.toString();
   return {code};
 }
+
+module.exports = {rxd_preprocess};

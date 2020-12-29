@@ -1,0 +1,19 @@
+dependencies:
+  acorn: 8.0.4
+  periscope: 0.1.0
+lockfileVersion: 5.2
+packages:
+  /acorn/8.0.4:
+    dev: false
+    engines:
+      node: '>=0.4.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-XNP0PqF1XD19ZlLKvB7cMmnZswW4C/03pRHgirB30uSJTaS3A3V1/P4sS3HPvFmjoriPCJQs+JDSbm4bL1TxGQ==
+  /periscope/0.1.0:
+    dev: false
+    resolution:
+      integrity: sha1-03xSeb0KCMB+tdbnpabsbWik5u0=
+specifiers:
+  acorn: ^8.0.4
+  periscope: ^0.1.0

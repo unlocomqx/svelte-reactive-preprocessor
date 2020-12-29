@@ -12,5 +12,9 @@
     "debugger"
   ],
   "author": "unlocomqx",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "acorn": "^8.0.4",
+    "periscope": "^0.1.0"
+  }
 }
