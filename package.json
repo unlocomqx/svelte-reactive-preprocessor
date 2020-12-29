@@ -1,0 +1,16 @@
+{
+  "name": "svelte-reactive-debugger",
+  "version": "0.0.1",
+  "description": "Wrap svelte reactive statements with custom events to allow devtools to detect them",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "svelte",
+    "reactive",
+    "debugger"
+  ],
+  "author": "unlocomqx",
+  "license": "ISC"
+}
