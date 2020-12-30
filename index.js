@@ -117,7 +117,17 @@ function rxdDoPreprocess(options) {
   return {code};
 }
 
-function rxdPreprocess() {
+function rxdPreprocess(userOptions) {
+  const options = {
+    enabled: true,
+
+    ...userOptions
+  };
+
+  if (!options.enabled) {
+    return {};
+  }
+
   return {
     script: rxdDoPreprocess
   };
