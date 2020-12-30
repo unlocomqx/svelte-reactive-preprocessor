@@ -1,5 +1,7 @@
 dependencies:
   acorn: 8.0.4
+  escape-string-regexp: 4.0.0
+  linenumber: 1.0.1
   periscopic: 2.0.3
 lockfileVersion: 5.2
 packages:
@@ -14,6 +16,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-XNP0PqF1XD19ZlLKvB7cMmnZswW4C/03pRHgirB30uSJTaS3A3V1/P4sS3HPvFmjoriPCJQs+JDSbm4bL1TxGQ==
+  /escape-string-regexp/4.0.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
   /estree-walker/2.0.2:
     dev: false
     resolution:
@@ -24,6 +32,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==
+  /linenumber/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-g7x+bxzGaJ7yUk1chFXmY4NT1oIiSQREUs33M29cjDPFUP1W/dlM3YGD1cR7qeSehp5TEpxAFP0L+Rpk3nUKzw==
   /periscopic/2.0.3:
     dependencies:
       estree-walker: 2.0.2
@@ -33,4 +45,6 @@ packages:
       integrity: sha512-FuCZe61mWxQOJAQFEfmt9FjzebRlcpFz8sFPbyaCKtdusPkMEbA9ey0eARnRav5zAhmXznhaQkKGFAPn7X9NUw==
 specifiers:
   acorn: ^8.0.4
+  escape-string-regexp: ^4.0.0
+  linenumber: ^1.0.1
   periscopic: ^2.0.3

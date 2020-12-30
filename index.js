@@ -1,10 +1,12 @@
 const acorn = require("acorn");
 const {extract_names} = require("periscopic");
+const linenumber = require('linenumber');
+const escapeStringRegexp = require('escape-string-regexp');
 const fs = require("fs");
 
 function rxdDoPreprocess(options) {
   let code = options.content;
-  const file_contents = fs.readFileSync(options.filename).toString().split("\n");
+  const file_contents = fs.readFileSync(options.filename).toString();
 
   const replacements = [];
   const declared_vars = new Set();
@@ -19,8 +21,11 @@ function rxdDoPreprocess(options) {
   }
 
   function getLineNumber(labeled_statement) {
-    let index = file_contents.findIndex((line) => line.trim() === labeled_statement);
-    return index > 0 ? index + 1 : 0;
+    let result = linenumber(file_contents, escapeStringRegexp(labeled_statement));
+    if (!result) {
+      return 0;
+    }
+    return result[0].line;
   }
 
   function wrapStatement(statement, filename, line_number) {
