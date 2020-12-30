@@ -9,9 +9,9 @@ function rxdDoPreprocess(options) {
   const inject_vars = new Set();
 
   let parsed;
-  try{
+  try {
     parsed = acorn.parse(options.content, {ecmaVersion: "2019"});
-  }catch (e) {
+  } catch (e) {
     e.message = "An error occurred in the svelte_rxd_preprocessor, make sure it's placed after the typescript preprocessor: " + e.message;
     throw e;
   }
