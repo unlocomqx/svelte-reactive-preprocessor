@@ -72,3 +72,21 @@ plugins: [
   }
 ],
 ```
+
+## Options (optional)
+The preprocessor options are listed below with their default values
+
+```javascript
+rxdPreprocess({
+  enabled: true
+})
+```
+
+### enabled: boolean
+Allows to conditionally enable/disable the preprocessor  
+Example
+```javascript
+{
+  enabled: !prod
+}
+```
