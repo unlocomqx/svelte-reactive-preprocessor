@@ -1,8 +1,10 @@
 const acorn = require("acorn");
 const {extract_names} = require("periscopic");
+const fs = require("fs");
 
 function rxdDoPreprocess(options) {
   let code = options.content;
+  const file_contents = fs.readFileSync(options.filename).toString().split("\n");
 
   const replacements = [];
   const declared_vars = new Set();
@@ -16,9 +18,14 @@ function rxdDoPreprocess(options) {
     throw e;
   }
 
-  function wrapStatement(statement) {
+  function getLineNumber(labeled_statement) {
+    let index = file_contents.findIndex((line) => line.trim() === labeled_statement);
+    return index > 0 ? index + 1 : 0;
+  }
+
+  function wrapStatement(statement, filename, line_number) {
     const id = makeid(4);
-    let details = `{statement: ${JSON.stringify(statement)}, id: "${id}"}`;
+    let details = `{statement: ${JSON.stringify(statement)}, filename: ${JSON.stringify(filename)}, line: ${line_number}, id: "${id}"}`;
     let start_ev = `{ let svrxd_start = Date.now(); dsp('SvelteReactiveStart', ${details}, svrxd_start);`;
     let end_ev = `dsp('SvelteReactiveEnd', ${details}, svrxd_start); }`;
     return `${start_ev} ${statement} ${end_ev}`;
@@ -62,8 +69,9 @@ function rxdDoPreprocess(options) {
       }
     }
 
+    const labeled_statement = code.substring(node.start, node.end);
     const statement = code.substring(body.start, body.end);
-    const wrapped = wrapStatement(statement);
+    const wrapped = wrapStatement(statement, options.filename, getLineNumber(labeled_statement));
     const uniqid = makeid(statement.length);
     code = replaceRange(code, body.start, body.end, uniqid);
     replacements.push({
@@ -113,7 +121,7 @@ function rxdDoPreprocess(options) {
     document.dispatchEvent(ev);
   }
 
-  code += '\n' + dsp.toString() + ';';
+  code += "\n" + dsp.toString() + ";";
   code += `\ndsp('SvelteReactiveEnable')`;
 
   return {code};
