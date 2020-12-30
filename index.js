@@ -8,7 +8,14 @@ function rxd_do_preprocess(options) {
   const declared_vars = new Set();
   const inject_vars = new Set();
 
-  const parsed = acorn.parse(options.content, {ecmaVersion: "2019"});
+  let parsed;
+  try{
+    parsed = acorn.parse(options.content, {ecmaVersion: "2019"});
+  }catch (e) {
+    e.message = "An error occurred in the svelte_rxd_preprocessor, make sure it's placed after the typescript preprocessor: " + e.message;
+    throw e;
+  }
+
 
   function wrapStatement(statement) {
     const id = makeid(4);
