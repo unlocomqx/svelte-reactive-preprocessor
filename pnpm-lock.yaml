@@ -1,6 +1,5 @@
 dependencies:
   acorn: 8.0.4
-  periscope: 0.1.0
   periscopic: 2.0.3
 lockfileVersion: 5.2
 packages:
@@ -25,10 +24,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==
-  /periscope/0.1.0:
-    dev: false
-    resolution:
-      integrity: sha1-03xSeb0KCMB+tdbnpabsbWik5u0=
   /periscopic/2.0.3:
     dependencies:
       estree-walker: 2.0.2
@@ -38,5 +33,4 @@ packages:
       integrity: sha512-FuCZe61mWxQOJAQFEfmt9FjzebRlcpFz8sFPbyaCKtdusPkMEbA9ey0eARnRav5zAhmXznhaQkKGFAPn7X9NUw==
 specifiers:
   acorn: ^8.0.4
-  periscope: ^0.1.0
   periscopic: ^2.0.3

@@ -10,7 +10,7 @@ function rxdDoPreprocess(options) {
 
   let parsed;
   try {
-    parsed = acorn.parse(options.content, {ecmaVersion: "2019"});
+    parsed = acorn.parse(options.content, {ecmaVersion: "2019", sourceType: "module"});
   } catch (e) {
     e.message = "An error occurred in the svelte_rxd_preprocessor, make sure it's placed after the typescript preprocessor: " + e.message;
     throw e;
@@ -107,13 +107,14 @@ function rxdDoPreprocess(options) {
 
   function dsp(type, detail, start_time) {
     const ev = document.createEvent("CustomEvent");
+    detail = detail || {};
     detail.start_time = start_time;
     ev.initCustomEvent(type, false, false, detail);
     document.dispatchEvent(ev);
   }
 
-  code += dsp.toString();
-  code += `(window || {}).rxd_debugger = true;`;
+  code += '\n' + dsp.toString() + ';';
+  code += `\ndsp('SvelteReactiveEnable')`;
 
   return {code};
 }
