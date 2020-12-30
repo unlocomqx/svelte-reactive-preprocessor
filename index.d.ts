@@ -1,1 +1,1 @@
-export function rxd_preprocess ();
+export function rxdPreprocess ();

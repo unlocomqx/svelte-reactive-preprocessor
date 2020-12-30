@@ -1,7 +1,7 @@
 const acorn = require("acorn");
 const {extract_names} = require("periscopic");
 
-function rxd_do_preprocess(options) {
+function rxdDoPreprocess(options) {
   let code = options.content;
 
   const replacements = [];
@@ -117,10 +117,10 @@ function rxd_do_preprocess(options) {
   return {code};
 }
 
-function rxd_preprocess() {
+function rxdPreprocess() {
   return {
-    script: rxd_do_preprocess
+    script: rxdDoPreprocess
   };
 }
 
-module.exports = {rxd_preprocess};
+module.exports = {rxdPreprocess};

@@ -14,10 +14,19 @@ npm i -D svelte-rxd-preprocessor
 ````
 
 ## How to use
-In the svelte loader options, add the rxd preprocessor like this
+First import the package like this
+```javascript
+const { rxdPreprocess } = require("svelte-rxd-preprocessor");
+```
+or
+```javascript
+import { rxdPreprocess } from "svelte-rxd-preprocessor";
+```
+
+Then in the svelte loader options, add the rxd preprocessor like this
 ```javascript
 // Import
-const { rxd_preprocess } = require("svelte-rxd-preprocessor");
+const { rxdPreprocess } = require("svelte-rxd-preprocessor");
 
 // config
 {
@@ -29,7 +38,7 @@ const { rxd_preprocess } = require("svelte-rxd-preprocessor");
       emitCss: true,
       hotReload: true,
       // add this line
-      preprocess: rxd_preprocess()
+      preprocess: rxdPreprocess()
     }
   }
 },
@@ -39,8 +48,27 @@ If you are already using another preprocessor, add the rxd preprocessor like thi
 ```javascript
 preprocess: [
   sveltePreprocess(),
-  rxd_preprocess(),
+  rxdPreprocess(),
 ],
 ```
 
-Make sure to add the rxd preprocessor after any script preprocessor as it only supports javascript
+Make sure to add the rxd preprocessor after any script preprocessor as it only supports javascript  
+The same goes for rollup
+```javascript
+plugins: [
+  svelte({
+    preprocess: rxdPreprocess(),
+  }
+],
+```
+or
+```javascript
+plugins: [
+  svelte({
+    preprocess: [
+      sveltePreprocess(),
+      rxdPreprocess(),
+    ],
+  }
+],
+```
