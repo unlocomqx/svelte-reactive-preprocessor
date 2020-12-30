@@ -16,7 +16,6 @@ function rxdDoPreprocess(options) {
     throw e;
   }
 
-
   function wrapStatement(statement) {
     const id = makeid(4);
     let details = `{statement: ${JSON.stringify(statement)}, id: "${id}"}`;
@@ -113,7 +112,9 @@ function rxdDoPreprocess(options) {
     document.dispatchEvent(ev);
   }
 
-  code = code + dsp.toString();
+  code += dsp.toString();
+  code += `(window || {}).rxd_debugger = true;`;
+
   return {code};
 }
 
