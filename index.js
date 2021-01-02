@@ -121,7 +121,6 @@ function rxdDoPreprocess(options) {
   }
 
   function dsp(type, detail, start_time, state) {
-    console.log(state);
     const ev = document.createEvent("CustomEvent");
     detail = detail || {};
     detail.start_time = start_time;
