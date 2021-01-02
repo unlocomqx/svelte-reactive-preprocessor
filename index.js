@@ -124,7 +124,7 @@ function rxdDoPreprocess(options) {
     const ev = document.createEvent("CustomEvent");
     detail = detail || {};
     detail.start_time = start_time;
-    detail.state = state;
+    detail.state = JSON.stringify(state);
     ev.initCustomEvent(type, false, false, detail);
     document.dispatchEvent(ev);
   }
