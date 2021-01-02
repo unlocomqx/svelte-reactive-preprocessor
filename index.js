@@ -32,7 +32,7 @@ function rxdDoPreprocess(options) {
     const id = makeid(4);
     let details = `{statement: ${JSON.stringify(statement)}, filename: ${JSON.stringify(filename)}, line: ${line_number}, id: "${id}"}`;
     let start_ev = `{ let svrxd_start = Date.now(); dsp('SvelteReactiveStart', ${details}, svrxd_start);`;
-    let end_ev = `dsp('SvelteReactiveEnd', ${details}, svrxd_start); }`;
+    let end_ev = `dsp('SvelteReactiveEnd', ${details}, svrxd_start, eval("$$$self.$capture_state()")); }`;
     return `${start_ev} ${statement} ${end_ev}`;
   }
 
@@ -118,10 +118,12 @@ function rxdDoPreprocess(options) {
     injectVariables();
   }
 
-  function dsp(type, detail, start_time) {
+  function dsp(type, detail, start_time, state) {
+    console.log(state);
     const ev = document.createEvent("CustomEvent");
     detail = detail || {};
     detail.start_time = start_time;
+    detail.state = state;
     ev.initCustomEvent(type, false, false, detail);
     document.dispatchEvent(ev);
   }
