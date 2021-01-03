@@ -31,7 +31,7 @@ function rxdDoPreprocess(options) {
   function wrapStatement(statement, filename, line_number) {
     const id = makeid(4);
     let details = `{statement: ${JSON.stringify(statement)}, filename: ${JSON.stringify(filename)}, line: ${line_number}, id: "${id}"}`;
-    let start_ev = `{ let svrxd_start = Date.now(); dsp('SvelteReactiveStart', ${details}, svrxd_start);`;
+    let start_ev = `{ let svrxd_start = Date.now(); dsp('SvelteReactiveStart', ${details}, svrxd_start, eval("$$$self.$capture_state()"));`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
     let end_ev = `dsp('SvelteReactiveEnd', ${details}, svrxd_start, eval("$$$self.$capture_state()")); }`;
