@@ -130,7 +130,9 @@ function rxdDoPreprocess(options) {
   }
 
   code += "\n" + dsp.toString() + ";";
-  code += `\ndsp('SvelteReactiveEnable')`;
+
+  const version = require("./package.json").version;
+  code += `\ndsp('SvelteReactiveEnable', {version: "${version}"});`;
 
   return {code};
 }
