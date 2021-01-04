@@ -1,7 +1,8 @@
 const acorn = require("acorn");
 const {extract_names} = require("periscopic");
-const linenumber = require('linenumber');
-const escapeStringRegexp = require('escape-string-regexp');
+const linenumber = require("linenumber");
+const escapeStringRegexp = require("escape-string-regexp");
+const stringify = require("./stringify");
 const fs = require("fs");
 
 function rxdDoPreprocess(options) {
@@ -30,7 +31,7 @@ function rxdDoPreprocess(options) {
 
   function wrapStatement(statement, filename, line_number) {
     const id = rxdMakeid(4);
-    let details = `{statement: ${JSON.stringify(statement)}, filename: ${JSON.stringify(filename)}, line: ${line_number}, id: "${id}"}`;
+    let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`;
     let start_ev = `{ let svrxd_start = Date.now(); let svrxd_exec = rxdMakeid(4); let start_state = eval("$$$self.$capture_state()"); dsp('SvelteReactiveStart', ${details}, svrxd_start, svrxd_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
@@ -120,19 +121,22 @@ function rxdDoPreprocess(options) {
     injectVariables();
   }
 
+  const rxd_stringify = stringify;
+
   function dsp(type, detail, start_time, exec_id, start_state, end_state) {
     const ev = document.createEvent("CustomEvent");
     detail = detail || {};
     detail.start_time = start_time;
     detail.exec_id = exec_id;
-    detail.start_state = JSON.stringify(start_state);
-    detail.end_state = JSON.stringify(end_state);
+    detail.start_state = rxd_stringify(start_state);
+    detail.end_state = rxd_stringify(end_state);
     ev.initCustomEvent(type, false, false, detail);
     document.dispatchEvent(ev);
   }
 
   code += "\n" + dsp.toString() + ";";
   code += "\n" + rxdMakeid.toString() + ";";
+  code += "\n" + (stringify.toString()).replace('function stringify', 'function rxd_stringify') + ";";
 
   const version = require("./package.json").version;
   code += `\ndsp('SvelteReactiveEnable', {version: "${version}"});`;

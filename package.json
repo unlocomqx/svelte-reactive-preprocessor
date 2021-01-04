@@ -16,6 +16,7 @@
   "dependencies": {
     "acorn": "^8.0.4",
     "escape-string-regexp": "^4.0.0",
+    "json-stringify-safe": "^5.0.1",
     "linenumber": "^1.0.1",
     "periscopic": "^2.0.3"
   }

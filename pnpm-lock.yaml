@@ -1,6 +1,7 @@
 dependencies:
   acorn: 8.0.4
   escape-string-regexp: 4.0.0
+  json-stringify-safe: 5.0.1
   linenumber: 1.0.1
   periscopic: 2.0.3
 lockfileVersion: 5.2
@@ -32,6 +33,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==
+  /json-stringify-safe/5.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
   /linenumber/1.0.1:
     dev: false
     resolution:
@@ -46,5 +51,6 @@ packages:
 specifiers:
   acorn: ^8.0.4
   escape-string-regexp: ^4.0.0
+  json-stringify-safe: ^5.0.1
   linenumber: ^1.0.1
   periscopic: ^2.0.3
