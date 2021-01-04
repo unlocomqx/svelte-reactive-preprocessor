@@ -29,12 +29,12 @@ function rxdDoPreprocess(options) {
   }
 
   function wrapStatement(statement, filename, line_number) {
-    const id = makeid(4);
+    const id = rxdMakeid(4);
     let details = `{statement: ${JSON.stringify(statement)}, filename: ${JSON.stringify(filename)}, line: ${line_number}, id: "${id}"}`;
-    let start_ev = `{ let svrxd_start = Date.now(); dsp('SvelteReactiveStart', ${details}, svrxd_start, eval("$$$self.$capture_state()"));`;
+    let start_ev = `{ let svrxd_start = Date.now(); let svrxd_exec = rxdMakeid(4); let start_state = eval("$$$self.$capture_state()"); dsp('SvelteReactiveStart', ${details}, svrxd_start, svrxd_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
-    let end_ev = `dsp('SvelteReactiveEnd', ${details}, svrxd_start, eval("$$$self.$capture_state()")); }`;
+    let end_ev = `dsp('SvelteReactiveEnd', ${details}, svrxd_start, svrxd_exec, start_state, eval("$$$self.$capture_state()")); }`;
     return `${start_ev} ${statement} ${end_ev}`;
   }
 
@@ -42,7 +42,7 @@ function rxdDoPreprocess(options) {
     return str.substring(0, start) + substitute + str.substring(end);
   }
 
-  function makeid(length) {
+  function rxdMakeid(length) {
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var charactersLength = characters.length;
@@ -79,7 +79,7 @@ function rxdDoPreprocess(options) {
     const labeled_statement = code.substring(node.start, node.end);
     const statement = code.substring(body.start, body.end);
     const wrapped = wrapStatement(statement, options.filename, getLineNumber(labeled_statement));
-    const uniqid = makeid(statement.length);
+    const uniqid = rxdMakeid(statement.length);
     code = replaceRange(code, body.start, body.end, uniqid);
     replacements.push({
       uniqid,
@@ -120,16 +120,19 @@ function rxdDoPreprocess(options) {
     injectVariables();
   }
 
-  function dsp(type, detail, start_time, state) {
+  function dsp(type, detail, start_time, exec_id, start_state, end_state) {
     const ev = document.createEvent("CustomEvent");
     detail = detail || {};
     detail.start_time = start_time;
-    detail.state = JSON.stringify(state);
+    detail.exec_id = exec_id;
+    detail.start_state = JSON.stringify(start_state);
+    detail.end_state = JSON.stringify(end_state);
     ev.initCustomEvent(type, false, false, detail);
     document.dispatchEvent(ev);
   }
 
   code += "\n" + dsp.toString() + ";";
+  code += "\n" + rxdMakeid.toString() + ";";
 
   const version = require("./package.json").version;
   code += `\ndsp('SvelteReactiveEnable', {version: "${version}"});`;
