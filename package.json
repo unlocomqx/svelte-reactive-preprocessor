@@ -1,6 +1,6 @@
 {
   "name": "svelte-rxd-preprocessor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wrap svelte reactive statements with custom events to allow devtools to detect them",
   "main": "index.js",
   "scripts": {
