@@ -15,7 +15,7 @@ function rxdDoPreprocess(options) {
 
   let parsed;
   try {
-    parsed = acorn.parse(options.content, {ecmaVersion: "2019", sourceType: "module"});
+    parsed = acorn.parse(code, {ecmaVersion: "latest", sourceType: "module"});
   } catch (e) {
     e.message = "An error occurred in the svelte_rxd_preprocessor, make sure it's placed after the typescript preprocessor: " + e.message;
     throw e;
