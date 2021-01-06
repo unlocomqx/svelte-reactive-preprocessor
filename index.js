@@ -54,9 +54,12 @@ function rxdDoPreprocess(options) {
   }
 
   function addExport(node) {
-    node.declaration.declarations.forEach(declarator => {
-      declared_vars.add(declarator.id.name);
-    });
+    const declaration = node.declaration;
+    if (declaration) {
+      declaration.declarations.forEach(declarator => {
+        declared_vars.add(declarator.id.name);
+      });
+    }
   }
 
   function addDeclaration(node) {
