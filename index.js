@@ -53,6 +53,12 @@ function rxdDoPreprocess(options) {
     return result;
   }
 
+  function addExport(node) {
+    node.declaration.declarations.forEach(declarator => {
+      declared_vars.add(declarator.id.name);
+    });
+  }
+
   function addDeclaration(node) {
     node.declarations.forEach(declarator => {
       extract_names(declarator.id).forEach(name => {
@@ -104,6 +110,10 @@ function rxdDoPreprocess(options) {
 
   if (parsed && parsed.body) {
     parsed.body.forEach(node => {
+      if (node.type === "ExportNamedDeclaration") {
+        addExport(node);
+      }
+
       if (node.type === "VariableDeclaration") {
         addDeclaration(node);
       }
