@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 let {rxdPreprocess} = require("../../index");
-const assert = require("assert");
+var expect = require('chai').expect;
+
 
 function transfrorm(content) {
     let transformer = rxdPreprocess();
@@ -16,15 +17,15 @@ function read(file) {
 describe("Reactive statements transformer", function () {
 
   it("transform reactive statement and add explicit let", function () {
-      assert.strictEqual(transfrorm("$: double = count * 2;"), read('output/reactive.txt').trim());
+      expect(transfrorm("$: double = count * 2;")).to.contain(read('output/reactive.txt').trim());
   });
 
   it("transform reactive statement and does not add explicit let for declared variable", function () {
-      assert.strictEqual(transfrorm(read('input/declared.js')), read('output/declared.txt').trim());
+      expect(transfrorm(read('input/declared.js'))).to.contain(read('output/declared.txt').trim());
   });
 
   it("transform reactive statement and does not add explicit let for exported variable", function () {
-      assert.strictEqual(transfrorm(read('input/exported.js')), read('output/exported.txt').trim());
+      expect(transfrorm(read('input/exported.js'))).to.contain(read('output/exported.txt').trim());
   });
 
 });
