@@ -9,10 +9,18 @@ function transfrorm(content) {
     return code;
 }
 
+function read(file) {
+  return fs.readFileSync(path.join(__dirname, file)).toString();
+}
+
 describe("Reactive statements transformer", function () {
 
-  it("transform reactive statement", function () {
-      assert.strictEqual(transfrorm("$: double = count * 2;"), fs.readFileSync(path.join(__dirname, 'output/reactive.txt')).toString().trim());
+  it("transform reactive statement and add explicit let", function () {
+      assert.strictEqual(transfrorm("$: double = count * 2;"), read('output/reactive.txt').trim());
+  });
+
+  it("transform reactive statement and does not add explicit let for declared variable", function () {
+      assert.strictEqual(transfrorm(read('input/declared.js')), read('output/declared.txt').trim());
   });
 
 });
