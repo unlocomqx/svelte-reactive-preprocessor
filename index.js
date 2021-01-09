@@ -14,7 +14,7 @@ function rxdDoPreprocess(options) {
     return;
   }
   let code = options.content;
-  const file_contents = fs.readFileSync(options.filename).toString();
+  const file_contents = fs.existsSync(options.filename) ? fs.readFileSync(options.filename).toString(): null;
 
   const replacements = [];
   const declared_vars = new Set();
@@ -29,6 +29,9 @@ function rxdDoPreprocess(options) {
   }
 
   function getLineNumber(labeled_statement) {
+    if (!file_contents) {
+      return 0;
+    }
     let result = linenumber(file_contents, escapeStringRegexp(labeled_statement));
     if (!result) {
       return 0;
@@ -37,7 +40,8 @@ function rxdDoPreprocess(options) {
   }
 
   function wrapStatement(statement, filename, line_number) {
-    const id = rxdMakeid(4);
+    // options.id comes from unit tests only
+    const id = options.id || rxdMakeid(4);
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`;
     let start_ev = `{ let svrxd_start = Date.now(); let svrxd_exec = rxdMakeid(4); let start_state = eval("$$$self.$capture_state()"); rxdDsp('SvelteReactiveStart', ${details}, svrxd_start, svrxd_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
@@ -113,7 +117,7 @@ function rxdDoPreprocess(options) {
   function injectVariables() {
     inject_vars.forEach(variable => {
       if (!declared_vars.has(variable)) {
-        code = `let ${variable};` + code;
+        code = `let ${variable};\n` + code;
       }
     });
   }
