@@ -1,5 +1,5 @@
 const acorn = require("acorn");
-const {extract_names} = require("periscopic");
+const {extract_names, analyze} = require("periscopic");
 const linenumber = require("linenumber");
 const escapeStringRegexp = require("escape-string-regexp");
 const stringify = require("./stringify");
@@ -17,7 +17,6 @@ function rxdDoPreprocess(options) {
   const file_contents = fs.existsSync(options.filename) ? fs.readFileSync(options.filename).toString(): null;
 
   const replacements = [];
-  const declared_vars = new Set();
   const inject_vars = new Set();
 
   let parsed;
@@ -64,23 +63,6 @@ function rxdDoPreprocess(options) {
     return result;
   }
 
-  function addExport(node) {
-    const declaration = node.declaration;
-    if (declaration && declaration.type === "VariableDeclaration") {
-      declaration.declarations.forEach(declarator => {
-        declared_vars.add(declarator.id.name);
-      });
-    }
-  }
-
-  function addDeclaration(node) {
-    node.declarations.forEach(declarator => {
-      extract_names(declarator.id).forEach(name => {
-        declared_vars.add(name);
-      });
-    });
-  }
-
   function addReactiveStatement(node) {
     const body = node.body;
 
@@ -114,24 +96,16 @@ function rxdDoPreprocess(options) {
     });
   }
 
-  function injectVariables() {
+  function injectVariables(declarations) {
     inject_vars.forEach(variable => {
-      if (!declared_vars.has(variable)) {
+      if (!declarations.has(variable)) {
         code = `let ${variable};\n` + code;
       }
     });
   }
 
   if (parsed && parsed.body) {
-    parsed.body.forEach(node => {
-      if (node.type === "ExportNamedDeclaration") {
-        addExport(node);
-      }
-
-      if (node.type === "VariableDeclaration") {
-        addDeclaration(node);
-      }
-    });
+    const { scope } = analyze(parsed);
 
     parsed.body.forEach(node => {
       if (node.type === "LabeledStatement" && node.label.name === "$") {
@@ -142,7 +116,8 @@ function rxdDoPreprocess(options) {
     if (replacements.length) {
       replaceReactiveStatements();
     }
-    injectVariables();
+
+    injectVariables(scope.declarations);
   }
 
   const rxdStringify = stringify;

@@ -1,2 +1,2 @@
-export let triple;
-$: triple = count * 3;
+export let half;
+$: half = count / 2;
