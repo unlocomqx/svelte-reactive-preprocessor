@@ -23,4 +23,8 @@ describe("Reactive statements transformer", function () {
       assert.strictEqual(transfrorm(read('input/declared.js')), read('output/declared.txt').trim());
   });
 
+  it("transform reactive statement and does not add explicit let for exported variable", function () {
+      assert.strictEqual(transfrorm(read('input/exported.js')), read('output/exported.txt').trim());
+  });
+
 });
