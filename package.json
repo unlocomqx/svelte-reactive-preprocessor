@@ -4,9 +4,11 @@
   "description": "Wrap svelte reactive statements with custom events to allow devtools to detect them",
   "main": "index.js",
   "scripts": {
-    "install-deps": "DIR=tests/app && $npm_execpath install --prefix $DIR",
-    "mocha": "mocha tests/unit",
-    "test": "DIR=tests/app && $npm_execpath run install-deps && $npm_execpath run mocha && $npm_execpath run dev --prefix $DIR & cypress run"
+    "install-deps": "$npm_execpath install --prefix tests/app",
+    "start-server": "$npm_execpath run dev --prefix tests/app",
+    "test:mocha": "mocha tests/unit",
+    "test:cypress": "cypress run",
+    "test": "$npm_execpath run install-deps && $npm_execpath run test:mocha && start-server-and-test start-server http://localhost:8888 test:cypress"
   },
   "keywords": [
     "svelte",
