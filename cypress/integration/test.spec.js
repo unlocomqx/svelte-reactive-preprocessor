@@ -6,7 +6,11 @@ describe("App test", () => {
     cy
     .visit("/")
     .get("#app")
-    .contains("Hello world!");
+    .contains("Hello world!")
+    .get("#add")
+    .click()
+    .get('#result')
+    .contains("Count: 2");
   });
 
 });

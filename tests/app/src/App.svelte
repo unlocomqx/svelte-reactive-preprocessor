@@ -1,9 +1,21 @@
 <script>
 	export let name;
+
+	let count = 1;
+
+	function increment() {
+		count++;
+	}
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
+	<div>
+		<button id="add" on:click={increment}>Add</button>
+		<p id="result">
+			Count: {count}
+		</p>
+	</div>
 </main>
 
 <style>
