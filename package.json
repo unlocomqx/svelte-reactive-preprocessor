@@ -19,5 +19,8 @@
     "json-stringify-safe": "^5.0.1",
     "linenumber": "^1.0.1",
     "periscopic": "^2.0.3"
+  },
+  "devDependencies": {
+    "cypress": "^6.2.1"
   }
 }
