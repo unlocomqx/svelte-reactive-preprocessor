@@ -8,7 +8,9 @@
     "start-server": "npm run dev --prefix tests/app",
     "test:mocha": "mocha tests/unit",
     "test:cypress": "cypress run",
-    "test": "npm run install-deps && npm run test:mocha && start-server-and-test start-server http://localhost:8888 test:cypress"
+    "test": "npm run install-deps && npm run test:mocha && start-server-and-test start-server http://localhost:8888 test:cypress",
+    "patch": "npm run test && npm version patch && npm publish && git push",
+    "minor": "npm run test && npm version minor && npm publish && git push"
   },
   "keywords": [
     "svelte",
