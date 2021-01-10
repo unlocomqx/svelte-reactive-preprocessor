@@ -17,15 +17,15 @@ function read(file) {
 describe("Reactive statements transformer", function () {
 
   it("transform reactive statement and add explicit let", function () {
-      expect(transfrorm("$: double = count * 2;")).to.contain(read('output/reactive.txt').trim());
+      expect(transfrorm("$: double = count * 2;")).to.contain(read('output/reactive.js').trim());
   });
 
   it("transform reactive statement and does not add explicit let for declared variable", function () {
-      expect(transfrorm(read('input/declared.js'))).to.contain(read('output/declared.txt').trim());
+      expect(transfrorm(read('input/declared.js'))).to.contain(read('output/declared.js').trim());
   });
 
   it("transform reactive statement and does not add explicit let for exported variable", function () {
-      expect(transfrorm(read('input/exported.js'))).to.contain(read('output/exported.txt').trim());
+      expect(transfrorm(read('input/exported.js'))).to.contain(read('output/exported.js').trim());
   });
 
 });
