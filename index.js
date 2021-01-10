@@ -14,7 +14,7 @@ function rxdDoPreprocess(options) {
     return;
   }
   let code = options.content;
-  const file_contents = fs.existsSync(options.filename) ? fs.readFileSync(options.filename).toString(): null;
+  const file_contents = fs.existsSync(options.filename) ? fs.readFileSync(options.filename).toString() : null;
 
   const replacements = [];
   const inject_vars = new Set();
@@ -40,9 +40,9 @@ function rxdDoPreprocess(options) {
 
   function wrapStatement(statement, filename, line_number) {
     // options.id comes from unit tests only
-    const id = options.id || rxdMakeid(4);
+    const id = options.id || uniqId(4);
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`;
-    let start_ev = `{ let svrxd_start = Date.now(); let svrxd_exec = rxdMakeid(4); let start_state = eval("$$$self.$capture_state()"); rxdDsp('SvelteReactiveStart', ${details}, svrxd_start, svrxd_exec, start_state);`;
+    let start_ev = `{ let svrxd_start = Date.now(); let svrxd_exec = Math.random(); let start_state = eval("$$$self.$capture_state()"); rxdDsp('SvelteReactiveStart', ${details}, svrxd_start, svrxd_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
     let end_ev = `rxdDsp('SvelteReactiveEnd', ${details}, svrxd_start, svrxd_exec, start_state, eval("$$$self.$capture_state()")); }`;
@@ -53,7 +53,7 @@ function rxdDoPreprocess(options) {
     return str.substring(0, start) + substitute + str.substring(end);
   }
 
-  function rxdMakeid(length) {
+  function uniqId(length) {
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var charactersLength = characters.length;
@@ -82,7 +82,7 @@ function rxdDoPreprocess(options) {
     const labeled_statement = code.substring(node.start, node.end);
     const statement = code.substring(body.start, body.end);
     const wrapped = wrapStatement(statement, options.filename, getLineNumber(labeled_statement));
-    const uniqid = rxdMakeid(statement.length);
+    const uniqid = uniqId(statement.length);
     code = replaceRange(code, body.start, body.end, uniqid);
     replacements.push({
       uniqid,
@@ -105,7 +105,7 @@ function rxdDoPreprocess(options) {
   }
 
   if (parsed && parsed.body) {
-    const { scope } = analyze(parsed);
+    const {scope} = analyze(parsed);
 
     parsed.body.forEach(node => {
       if (node.type === "LabeledStatement" && node.label.name === "$") {
@@ -120,22 +120,7 @@ function rxdDoPreprocess(options) {
     injectVariables(scope.declarations);
   }
 
-  const rxdStringify = stringify;
-
-  function rxdDsp(type, detail, start_time, exec_id, start_state, end_state) {
-    const ev = document.createEvent("CustomEvent");
-    detail = detail || {};
-    detail.start_time = start_time;
-    detail.exec_id = exec_id;
-    detail.start_state = rxdStringify(start_state);
-    detail.end_state = rxdStringify(end_state);
-    ev.initCustomEvent(type, false, false, detail);
-    document.dispatchEvent(ev);
-  }
-
-  code += "\n" + rxdDsp.toString() + ";";
-  code += "\n" + rxdMakeid.toString() + ";";
-  code += "\n" + (stringify.toString()).replace('function stringify', 'function rxdStringify') + ";";
+  code += `\n window.rxdDsp = window.rxdDsp || function() {}; \n`;
 
   const version = require("./package.json").version;
   code += `\nrxdDsp('SvelteReactiveEnable', {version: "${version}"});`;
