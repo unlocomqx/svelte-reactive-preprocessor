@@ -1,4 +1,4 @@
-export interface RxdOptions {
+export interface RPOptions {
   enabled: boolean;
 }
-export function rxdPreprocess (options: RxdOptions);
+export function reactivePreprocess (options: RPOptions);

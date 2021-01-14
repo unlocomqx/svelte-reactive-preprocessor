@@ -9,7 +9,7 @@ function inNodeModules(path) {
   return /\/node_modules\//.test(path);
 }
 
-function rxdDoPreprocess(options) {
+function doPreprocess(options) {
   if (inNodeModules(options.filename)) {
     return;
   }
@@ -23,7 +23,7 @@ function rxdDoPreprocess(options) {
   try {
     parsed = acorn.parse(code, {ecmaVersion: "latest", sourceType: "module"});
   } catch (e) {
-    e.message = "An error occurred in the svelte_rxd_preprocessor, make sure it's placed after the typescript preprocessor: " + e.message;
+    e.message = "An error occurred in the svelte-reactive-preprocessor, make sure it's placed after the typescript preprocessor: " + e.message;
     throw e;
   }
 
@@ -42,10 +42,10 @@ function rxdDoPreprocess(options) {
     // options.id comes from unit tests only
     const id = options.id || uniqId(4);
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`;
-    let start_ev = `{ let svrxd_start = Date.now(); let svrxd_exec = Math.random(); let start_state = eval("$$$self.$capture_state()"); rxdDsp('SvelteReactiveStart', ${details}, svrxd_start, svrxd_exec, start_state);`;
+    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("$$$self.$capture_state()"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
-    let end_ev = `rxdDsp('SvelteReactiveEnd', ${details}, svrxd_start, svrxd_exec, start_state, eval("$$$self.$capture_state()")); }`;
+    let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("$$$self.$capture_state()")); }`;
     return `${start_ev} ${statement} ${end_ev}`;
   }
 
@@ -120,15 +120,15 @@ function rxdDoPreprocess(options) {
     injectVariables(scope.declarations);
   }
 
-  code += `\n window.rxdDsp = window.rxdDsp || function() {}; \n`;
+  code += `\n window.rpDsp = window.rpDsp || function() {}; \n`;
 
   const version = require("./package.json").version;
-  code += `\nrxdDsp('SvelteReactiveEnable', {version: "${version}"});`;
+  code += `\nrpDsp('SvelteReactiveEnable', {version: "${version}"});`;
 
   return {code};
 }
 
-function rxdPreprocess(userOptions) {
+function reactivePreprocess(userOptions) {
   const options = {
     enabled: true,
 
@@ -140,8 +140,8 @@ function rxdPreprocess(userOptions) {
   }
 
   return {
-    script: rxdDoPreprocess
+    script: doPreprocess
   };
 }
 
-module.exports = {rxdPreprocess};
+module.exports = {reactivePreprocess};

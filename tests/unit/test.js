@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
-let {rxdPreprocess} = require("../../index");
+let {reactivePreprocess} = require("../../index");
 var expect = require('chai').expect;
 
 
 function transfrorm(content) {
-    let transformer = rxdPreprocess();
+    let transformer = reactivePreprocess();
     let {code} = transformer.script.call(null, {content, id: 'ABCD', filename: '', line: 0});
     return code;
 }
