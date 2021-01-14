@@ -1,4 +1,4 @@
-export interface RPOptions {
+export interface ReactivePreprocessorOptions {
   enabled: boolean;
 }
-export function reactivePreprocess (options: RPOptions);
+export function reactivePreprocess (options: ReactivePreprocessorOptions);
