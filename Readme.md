@@ -1,3 +1,5 @@
+[<img src="https://img.shields.io/npm/v/svelte-reactive-preprocessor">](https://www.npmjs.com/package/svelte-reactive-preprocessor)
+
 # Svelte Reactive Preprocessor
 Wrap svelte reactive statements with custom events to allow devtools to detect them
 
