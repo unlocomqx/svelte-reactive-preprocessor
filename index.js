@@ -120,7 +120,7 @@ function doPreprocess(options) {
     injectVariables(scope.declarations);
   }
 
-  code += `\n window.rpDsp = window.rpDsp || function() {}; \n`;
+  code += `\n (global || window).rpDsp = (global || window).rpDsp || function() {}; \n`;
 
   const version = require("./package.json").version;
   code += `\nrpDsp('SvelteReactiveEnable', {version: "${version}"});`;
