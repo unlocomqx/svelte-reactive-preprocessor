@@ -1,6 +1,6 @@
 {
   "name": "svelte-reactive-preprocessor",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Wrap svelte reactive statements with custom events to allow devtools to detect them",
   "main": "index.js",
   "scripts": {
