@@ -42,10 +42,10 @@ function doPreprocess(options) {
     // options.id comes from unit tests only
     const id = options.id || uniqId(4);
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`;
-    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("$$$self.$capture_state()"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`;
+    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("$$$self.$capture_state && $$$self.$capture_state()"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
-    let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("$$$self.$capture_state()")); }`;
+    let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("$$$self.$capture_state && $$$self.$capture_state()")); }`;
     return `${start_ev} ${statement} ${end_ev}`;
   }
 
