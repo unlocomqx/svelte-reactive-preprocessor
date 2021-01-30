@@ -36,6 +36,13 @@ The preprocessor options are listed below with their default values
 
 ```javascript
 reactivePreprocess({
-  enabled: true
+  enabled: true,
+  state: true,
 })
 ```
+
+### enabled: boolean
+Enable or disable the preprocessor
+
+### state: boolean
+Whether to send the state to devtools. Set to false if you encounter performance issues.

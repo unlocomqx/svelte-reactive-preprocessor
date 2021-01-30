@@ -9,12 +9,17 @@ function inNodeModules(path) {
   return /\/node_modules\//.test(path);
 }
 
-function doPreprocess(options) {
-  if (inNodeModules(options.filename)) {
+let options = {
+  enabled: true,
+  state: true,
+};
+
+function doPreprocess(params) {
+  if (inNodeModules(params.filename)) {
     return;
   }
-  let code = options.content;
-  const file_contents = fs.existsSync(options.filename) ? fs.readFileSync(options.filename).toString() : null;
+  let code = params.content;
+  const file_contents = fs.existsSync(params.filename) ? fs.readFileSync(params.filename).toString() : null;
 
   const replacements = [];
   const inject_vars = new Set();
@@ -38,14 +43,16 @@ function doPreprocess(options) {
     return result[0].line;
   }
 
+  let state_eval = options.state ? "$$$self.$capture_state && $$$self.$capture_state()" : "{}";
+  console.log(state_eval);
   function wrapStatement(statement, filename, line_number) {
     // options.id comes from unit tests only
-    const id = options.id || uniqId(4);
+    const id = params.id || uniqId(4);
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`;
-    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("$$$self.$capture_state && $$$self.$capture_state()"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`;
+    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("${state_eval}"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`;
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
-    let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("$$$self.$capture_state && $$$self.$capture_state()")); }`;
+    let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("${state_eval}")); }`;
     return `${start_ev} ${statement}; ${end_ev}`;
   }
 
@@ -81,7 +88,7 @@ function doPreprocess(options) {
 
     const labeled_statement = code.substring(node.start, node.end);
     const statement = code.substring(body.start, body.end);
-    const wrapped = wrapStatement(statement, options.filename, getLineNumber(labeled_statement));
+    const wrapped = wrapStatement(statement, params.filename, getLineNumber(labeled_statement));
     const uniqid = uniqId(statement.length);
     code = replaceRange(code, body.start, body.end, uniqid);
     replacements.push({
@@ -130,9 +137,8 @@ function doPreprocess(options) {
 }
 
 function reactivePreprocess(userOptions) {
-  const options = {
-    enabled: true,
-
+  options = {
+    ...options,
     ...userOptions
   };
 
