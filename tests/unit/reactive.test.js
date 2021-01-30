@@ -40,3 +40,12 @@ test("transform reactive statement and does not add explicit let for exported va
 
   expect(transformed).toContain(expected);
 });
+
+test("transform statement not terminated by semiclon", function () {
+  let transformed = transform("$: double = count * 2");
+  let expected = read("output/no-semicolon.js").trim();
+
+  console.log(diffStringsUnified(transformed, expected));
+
+  expect(transformed).toContain(expected);
+});
