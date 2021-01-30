@@ -53,7 +53,9 @@ function doPreprocess(params) {
     // eval is used to avoid the svelte compiler.
     // $$$ is used because something is replacing $$ with one $
     let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("${state_eval}")); }`;
-    return `${start_ev} ${statement}; ${end_ev}`;
+
+    const semicolon = /;$/.test(statement) ? "" : ";";
+    return `${start_ev} ${statement}${semicolon} ${end_ev}`;
   }
 
   function replaceRange(str, start, end, substitute) {
