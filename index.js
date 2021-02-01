@@ -44,7 +44,7 @@ function doPreprocess(params) {
   }
 
   let state_eval = options.state ? "$$$self.$capture_state && $$$self.$capture_state()" : "{}";
-  console.log(state_eval);
+
   function wrapStatement(statement, filename, line_number) {
     // options.id comes from unit tests only
     const id = params.id || uniqId(4);
