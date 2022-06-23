@@ -31,5 +31,17 @@
     "jest": "^26.6.3",
     "jest-diff": "^26.6.2",
     "start-server-and-test": "^1.11.7"
-  }
+  },
+  "types": "./index.d.ts",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unlocomqx/svelte-reactive-preprocessor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/unlocomqx/svelte-reactive-preprocessor/issues"
+  },
+  "homepage": "https://github.com/unlocomqx/svelte-reactive-preprocessor#readme"
 }
