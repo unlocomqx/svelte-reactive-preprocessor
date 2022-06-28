@@ -1,22 +1,22 @@
-<script>
-  export let name;
-  export let half;
-  export let quarter = 0;
+<script lang="ts">
+  export let name
+  export let half: number
+  export let quarter = 0
 
-  let count = 1;
+  let count = 1
 
-  function increment() {
-    count++;
+  function increment () {
+    count++
   }
 
-  $: double = count * 2;
+  $: double = count * 2
 
-  let triple;
-  $: triple = count * 3;
+  let triple
+  $: triple = count * 3
 
-  $: half = count / 2;
+  $: half = count / 2
 
-  $: quarter = count / 4;
+  $: quarter = count / 4
 </script>
 
 <main>
