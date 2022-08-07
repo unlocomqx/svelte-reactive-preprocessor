@@ -49,3 +49,12 @@ test("transform statement not terminated by semiclon", function () {
 
   expect(transformed).toContain(expected);
 });
+
+test("transform reactive statement and keep $$", function () {
+  let transformed = transform(read("input/declared-slots-variable.js"));
+  let expected = read("output/declared-slots-variable.js").trim();
+
+  console.log(diffStringsUnified(transformed, expected));
+
+  expect(expected).toContain(expected);
+});
