@@ -43,7 +43,7 @@ function doPreprocess(params) {
     return result[0].line
   }
 
-  let state_eval = options.state ? "$$$self.$capture_state && $$$self.$capture_state()" : "{}"
+  let state_eval = options.state ? "$$self.$capture_state && $$self.$capture_state()" : "{}"
 
   function wrapStatement(statement, filename, line_number) {
     // options.id comes from unit tests only
@@ -51,7 +51,6 @@ function doPreprocess(params) {
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`
     let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("${state_eval}"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`
     // eval is used to avoid the svelte compiler.
-    // $$$ is used because something is replacing $$ with one $
     let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("${state_eval}")); }`
 
     const semicolon = /;$/.test(statement) ? "" : ";"
@@ -101,7 +100,7 @@ function doPreprocess(params) {
 
   function replaceReactiveStatements() {
     replacements.forEach(repl => {
-      code = code.replace(repl.uniqid, repl.statement)
+      code = code.replace(repl.uniqid, () => repl.statement)
     })
   }
 
