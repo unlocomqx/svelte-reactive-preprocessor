@@ -49,9 +49,9 @@ function doPreprocess(params) {
     // options.id comes from unit tests only
     const id = params.id || uniqId(4)
     let details = `{statement: ${stringify(statement)}, filename: ${stringify(filename)}, line: ${line_number}, id: "${id}"}`
-    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("${state_eval}"); rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`
+    let start_ev = `{ let svrp_start = Date.now(); let svrp_exec = Math.random(); let start_state = eval("${state_eval}"); rpGlobal.rpDsp('SvelteReactiveStart', ${details}, svrp_start, svrp_exec, start_state);`
     // eval is used to avoid the svelte compiler.
-    let end_ev = `rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("${state_eval}")); }`
+    let end_ev = `rpGlobal.rpDsp('SvelteReactiveEnd', ${details}, svrp_start, svrp_exec, start_state, eval("${state_eval}")); }`
 
     const semicolon = /;$/.test(statement) ? "" : ";"
     return `${start_ev} ${statement}${semicolon} ${end_ev}`
@@ -132,7 +132,7 @@ function doPreprocess(params) {
   code += `\n rpGlobal.rpDsp = rpGlobal.rpDsp || function() {}; \n`
 
   const version = require("./package.json").version
-  code += `\nrpDsp('SvelteReactiveEnable', {version: "${version}"});`
+  code += `\nrpGlobal.rpDsp('SvelteReactiveEnable', {version: "${version}"});`
 
   return {code}
 }
