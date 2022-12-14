@@ -128,8 +128,8 @@ function doPreprocess(params) {
     injectVariables(scope.declarations)
   }
 
-  code += `\n var rpGlobal = typeof window !== "undefined" ? window : global; \n`
-  code += `\n rpGlobal.rpDsp = rpGlobal.rpDsp || function() {}; \n`
+  code += `\nvar rpGlobal = typeof window !== "undefined" ? window : global;\n`
+  code += `\nrpGlobal.rpDsp = rpGlobal.rpDsp || function() {};\n`
 
   const version = require("./package.json").version
   code += `\nrpGlobal.rpDsp('SvelteReactiveEnable', {version: "${version}"});`
